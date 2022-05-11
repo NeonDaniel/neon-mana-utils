@@ -59,16 +59,22 @@ def get_stt(messagebus_client: MessageBusClient,
 
 def get_tts(messagebus_client: MessageBusClient,
             text_to_speak: str = None,
+            lang: str = "en-us",
             speaker: Optional[dict] = None):
     """
     Send text to the audio module and return the synthesis response
     :param messagebus_client: Running MessageBusClient
     :param text_to_speak: String to synthesize
+    :param lang: Language of text
     :param speaker: Dict speaker data associated with request
     :returns: Response Message from audio module (None if no response)
     """
     ident = str(time())
-    data = {"text": text_to_speak}
+    data = {"text": text_to_speak,
+            "speaker": {"name": "Neon",
+                        "language": lang,
+                        "gender": "female"}}
+
     context = {"ident": ident,
                "speaker": speaker}
     resp = messagebus_client.wait_for_response(Message("neon.get_tts",

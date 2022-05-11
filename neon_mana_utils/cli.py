@@ -157,7 +157,9 @@ def get_stt(file, lang):
 @neon_mana_cli.command(help="Get a TTS response")
 @click.option('--text', '-t', default=None,
               help="Text to synthesize")
-def get_tts(text):
+@click.option('--lang', '-l', default='en-us',
+              help="Language of text to synthesize")
+def get_tts(text, lang):
     from neon_mana_utils.bus_api import get_tts
 
     if not text:
@@ -165,7 +167,7 @@ def get_tts(text):
 
     client = MessageBusClient(**get_messagebus_config())
     client.run_in_thread()
-    message = get_tts(client, text)
+    message = get_tts(client, text, lang)
     if message:
         click.echo(pformat(json.loads(message.serialize())))
     else:
